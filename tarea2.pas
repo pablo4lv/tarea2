@@ -108,7 +108,7 @@ function EsTableroCompleto(t : Tablero) : boolean;
         begin
           while (j <= CANT_COL ) and aux do
             begin
-              aux:= ( t[i,j].oculto ) and ( t[i,j].tipo = libre );
+              aux:= not ( ( t[i,j].oculto ) and ( t[i,j].tipo = libre ) );
               j:= j + 1;
             end;
         i:= i + 1;
