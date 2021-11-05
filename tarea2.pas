@@ -23,7 +23,7 @@ procedure DesocultarMinas (var t : Tablero);
 function EsPosicionValida (f, c : integer) : boolean;
   var aux : boolean;
     begin
-      aux:= ( f >= 1 ) and ( f < CANT_FIL ) and ( c >= 1 ) and ( c < CANT_COL );
+      aux:= ( f >= 1 ) and ( f <= CANT_FIL ) and ( c >= 1 ) and ( c <= CANT_COL );
       EsPosicionValida:= aux
     end;
     
@@ -86,14 +86,16 @@ procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : Li
     end;
     
 procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);    
-  var p: ListaPos; po: Posicion;
+  var p: ListaPos; po: Posicion; a, b: integer;
     begin
-      p:= nil;
-      Desocultar(f,c,t,p);
+	  po.fila:=f;
+	  po.columna:=c;
+	  Desocultar(f,c,t,p);
       while p <> nil do
         begin
-          PrimeraPosicion(po,p);
-          DesocultarAdyacentes(po.fila,po.columna,t,p);
+		  a:= po.fila; b:= po.columna;
+		  DesocultarAdyacentes(a, b, t, p);
+		  PrimeraPosicion(po,p);
         end;
     end;
     
