@@ -91,14 +91,11 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
 	  po.fila:=f;
 	  po.columna:=c;
 	  new(p);
-	  p^.pos:=po;
-	  p^.sig:=nil;
 	  Desocultar(f,c,t,p);
-	  PrimeraPosicion(po,p);
       while p <> nil do
         begin
-		  DesocultarAdyacentes(po.fila, po.columna, t, p);
 		  PrimeraPosicion(po,p);
+		  DesocultarAdyacentes(po.fila, po.columna, t, p);
         end;
     end;
     
