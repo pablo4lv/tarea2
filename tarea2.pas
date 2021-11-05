@@ -1,12 +1,117 @@
 procedure IniciarTableroVacio (var t : Tablero);
-var i, J: integer;
-  begin
-    for i:=1 to CANT_FIL do
-      for j:=1 to CANT_COL do
-        with t[i,j] do
+  var i, J: integer;
+    begin
+      for i:=1 to CANT_FIL do
+        for j:=1 to CANT_COL do
+          with t[i,j] do
+            begin
+              oculto:= true;
+             tipo:= Libre;          
+             minasAlrededor:= 0
+            end;
+    end;
+
+procedure DesocultarMinas (var t : Tablero);
+  var i, J: integer;
+    begin
+      for i:=1 to CANT_FIL do
+        for j:=1 to CANT_COL do
+          if (t[i,j].tipo = Mina) then
+            t[i,j].oculto:= false
+    end;
+  
+function EsPosicionValida (f, c : integer) : boolean;
+  var aux : boolean;
+    begin
+      aux:= ( f >= 1 ) and ( f < CANT_FIL ) and ( c >= 1 ) and ( c < CANT_COL );
+      EsPosicionValida:= aux
+    end;
+    
+procedure AgregarMinas (m : Minas; var t : Tablero);
+  var i, j, k, x, y: integer;
+    begin
+      for i:=1 to m.tope do
+      begin
+        if EsPosicionValida( m.elems[i].fila , m.elems[i].columna ) then
           begin
-            oculto:= true;
-            tipo:= libre;          
-            minasAlrededor:= 0
-          end
-  end;
+            t[m.elems[i].fila , m.elems[i].columna].tipo:= mina;
+            x:= m.elems[i].fila - 1;
+            y:= m.elems[i].columna - 1;
+              for j:= 1 to 3 do
+                begin
+                  for k:= 1 to 3 do
+                    begin
+                      if EsPosicionValida(x,y) then
+                        if t[x,y].tipo <> mina then
+                          t[x,y].minasAlrededor:= t[x,y].minasAlrededor + 1;
+                      x:= x + 1;
+                    end;
+                  x:= m.elems[i].fila - 1;
+                  y:= y + 1;
+                end;
+          end;
+      end;
+    end;
+
+procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
+    var pos: Posicion;
+      begin
+        if EsPosicionValida(f,c) and ( t[f,c].tipo = libre ) then
+          begin
+            t[f,c].oculto:= false;
+            if t[f,c].minasAlrededor = 0 then
+              begin
+                pos.fila:= f;
+                pos.columna:= c;
+                AgregarAlFinal(pos,libres);
+              end;
+          end;    
+      end;
+      
+procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : ListaPos);    
+  var i, k, x, y:integer;
+    begin
+      x:= f - 1;
+      y:= c - 1;
+      for i:= 1 to 3 do
+        begin
+          for j:= 1 to 3 do
+            begin
+              Desocultar(x,y,t,libres);
+              x:= x + 1;
+            end;
+          x:= f - 1;
+          y:= y + 1;  
+        end;
+    end;
+    
+procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);    
+  var p: ListaPos; po: Posicion;
+    begin
+      p:= nil;
+      Desocultar(f,c,t,p);
+      while p <> nil do
+        begin
+          PrimeraPosicion(po,p);
+          DesocultarAdyacentes(po.fila,po.columna,t,p);
+        end;
+    end;
+    
+function EsTableroCompleto(t : Tablero) : boolean;
+  var aux: boolean; i, j : integer;
+    begin
+      a:= 1; b:= 1;
+      while ( a <= CANT_FIL ) and aux do
+        begin
+          while (b <= CANT_COL ) and aux do
+            begin
+              aux:= not( ( t[a,b].oculto ) and ( t[a,b] = libre ) );
+              b:= b + 1;
+            end;
+        a:= a + 1;
+        end;
+      EsTableroCompleto:= aux;  
+    end;
+    
+    
+    
