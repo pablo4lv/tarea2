@@ -97,17 +97,17 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
 	  PrimeraPosicion(po,p);
       while p <> nil do
         begin
-		  DesocultarAdyacentes(po.fila, po.columna, t, p);
-		  PrimeraPosicion(po,p);
+	  DesocultarAdyacentes(po.fila, po.columna, t, p);
+	  PrimeraPosicion(po,p);
         end;
     end;
     
 function EsTableroCompleto(t : Tablero) : boolean;
   var aux: boolean; i, j : integer;
     begin
-	  aux:= true;
+      aux:= true;
       i:= 1; j:= 1;
-      while ( i <= CANT_FIL ) and aux do
+      while ( i <= CANT_FIL ) and aux do 
         begin
           while (j <= CANT_COL ) and aux do
             begin
