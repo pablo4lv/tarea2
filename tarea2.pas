@@ -5,7 +5,7 @@ procedure IniciarTableroVacio (var t : Tablero);
         for j:=1 to CANT_COL do
           with t[i,j] do
             begin
-              oculto:= true;
+             oculto:= true;
              tipo:= Libre;          
              minasAlrededor:= 0
             end;
@@ -69,7 +69,7 @@ procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
       end;
       
 procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : ListaPos);    
-  var i, k, x, y:integer;
+  var i, j, x, y:integer;
     begin
       x:= f - 1;
       y:= c - 1;
@@ -100,18 +100,16 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
 function EsTableroCompleto(t : Tablero) : boolean;
   var aux: boolean; i, j : integer;
     begin
-      a:= 1; b:= 1;
-      while ( a <= CANT_FIL ) and aux do
+	  aux:= true;
+      i:= 1; j:= 1;
+      while ( i <= CANT_FIL ) and aux do
         begin
-          while (b <= CANT_COL ) and aux do
+          while (j <= CANT_COL ) and aux do
             begin
-              aux:= not( ( t[a,b].oculto ) and ( t[a,b] = libre ) );
-              b:= b + 1;
+              aux:= ( t[i,j].oculto ) and ( t[i,j].tipo = libre );
+              j:= j + 1;
             end;
-        a:= a + 1;
+        i:= i + 1;
         end;
       EsTableroCompleto:= aux;  
     end;
-    
-    
-    
