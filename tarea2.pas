@@ -56,7 +56,7 @@ procedure AgregarMinas (m : Minas; var t : Tablero);
 procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
     var pos: Posicion;
       begin
-        if EsPosicionValida(f,c) and ( t[f,c].tipo = libre ) then
+        if EsPosicionValida(f,c) and ( t[f,c].tipo = libre ) and (t[f,c].oculto) then
           begin
             t[f,c].oculto:= false;
             if t[f,c].minasAlrededor = 0 then
@@ -90,7 +90,11 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
     begin
 	  po.fila:=f;
 	  po.columna:=c;
+	  new(p);
+	  p^.pos:=po;
+	  p^.sig:=nil;
 	  Desocultar(f,c,t,p);
+	  PrimeraPosicion(po,p);
       while p <> nil do
         begin
 		  DesocultarAdyacentes(po.fila, po.columna, t, p);
