@@ -103,13 +103,13 @@ function EsTableroCompleto(t : Tablero) : boolean;
   var aux: boolean; i, j : integer;
     begin
 	  aux:= true;
-      i:= 1; j:= 1;
+      i:= 1;
       while ( i <= CANT_FIL ) and aux do
         begin
-          while (j <= CANT_COL ) and aux do
+          for j:= 1 to CANT_COL do
             begin
-              aux:= not ( ( t[i,j].oculto ) and ( t[i,j].tipo = libre ) );
-              j:= j + 1;
+              aux:= not( ( t[i,j].oculto ) and ( t[i,j].tipo = libre ) );
+              
             end;
         i:= i + 1;
         end;
