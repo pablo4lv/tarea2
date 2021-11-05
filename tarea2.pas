@@ -69,7 +69,7 @@ procedure Desocultar (f, c : integer; var t : Tablero; var libres : ListaPos);
       end;
       
 procedure DesocultarAdyacentes (f, c : integer; var t : Tablero; var libres : ListaPos);    
-  var i, j, x, y:integer;
+  var i, k, x, y:integer;
     begin
       x:= f - 1;
       y:= c - 1;
@@ -89,6 +89,8 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
   var p: ListaPos; po: Posicion;
     begin
       p:= nil;
+      po.fila:= f;
+      po.columna:= c;
       Desocultar(f,c,t,p);
       while p <> nil do
         begin
@@ -100,16 +102,18 @@ procedure DesocultarDesde (f : RangoFilas;  c : RangoColum; var t : Tablero);
 function EsTableroCompleto(t : Tablero) : boolean;
   var aux: boolean; i, j : integer;
     begin
-	  aux:= true;
-      i:= 1; j:= 1;
-      while ( i <= CANT_FIL ) and aux do
+      a:= 1; b:= 1;
+      while ( a <= CANT_FIL ) and aux do
         begin
-          while (j <= CANT_COL ) and aux do
+          while (b <= CANT_COL ) and aux do
             begin
-              aux:= ( t[i,j].oculto ) and ( t[i,j].tipo = libre );
-              j:= j + 1;
+              aux:= not( ( t[a,b].oculto ) and ( t[a,b] = libre ) );
+              b:= b + 1;
             end;
-        i:= i + 1;
+        a:= a + 1;
         end;
       EsTableroCompleto:= aux;  
     end;
+    
+    
+    
